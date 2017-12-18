@@ -1,39 +1,55 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import { View, Text} from 'react-native';
+import { View, Text, ScrollView, StyleSheet} from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
 
-import FetchCoinData from './../Actions/FetchCoinData';
-import CoinCard from './CoinCard';
+
+import {bindActionCreators} from 'redux';
+import * as fetchCoinData from './../Actions/FetchCoinData';
+//import CoinCard from './CoinCard';
+import CoinList from './CoinList';
 
 class CryptoContainer extends Component {
-
-    componentDidMount() {
-        this.props.FetchCoinData();
+    constructor(props) {
+        super(props);
     }
 
-    renderCoinCards() {
-        const { crypto } = this.props;
-        
-        return crypto.data.map((coin, index) =>
-        <CoinCard
-            key={index}
-            coin_name={coin.coin_name}
-            symbol={coin.symbol}
-            price_aud={coin.price_aud}
-            percentage_change_24h={coin.percentage_change_24h}
-            percentage_change_7d={coin.percentage_change_7d}
-        />
-    )}
+
 
     render() {
-        const {crypto} = this.props;
-        return(
-            <View>
-                {this.renderCoinCards()}
-            </View>
+        //const { crypto } = this.props;
+        const { contentContainer } = styles;
+
+        /*if (crypto.isFetching) {
+            return (
+                <View>
+                    <Spinner
+                        visible={crypto.isFetching}
+                        textContent={"Loading..."}
+                        textStyle={{color: '#253145'}}
+                        animation="fade"
+                    />
+                </View>
+            )
+        }*/
+
+        return (
+            <ScrollView contentContainerStyle={contentContainer}>
+                <CoinList test="test" name="This is the name" cryptoList={this.props.crypto.crypto}/>
+            </ScrollView>
         )
+
+
     }
 }
+
+
+const styles = {
+    contentContainer: {
+        paddingBottom :100,
+        paddingTop: 55
+    }
+};
 
 function mapStateToProps(state) {
     return {
@@ -41,4 +57,10 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, {FetchCoinData})(CryptoContainer);
+function mapDispatchToProps(dispatch) {
+    return {
+        renderCoinCards: bindActionCreators(fetchCoinData, dispatch)
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CryptoContainer);

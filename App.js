@@ -1,21 +1,23 @@
-import React from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { View } from 'react-native';
 import { Provider } from 'react-redux';
 
-import Store from './src/Store';
+import configureStore from './src/Store';
 import { Header, CryptoContainer } from './src/components';
+import {fetchCoinData} from "./src/Actions/FetchCoinData";
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <Provider store={Store}>
-        <View>
-            <Header />
-            <CryptoContainer />
-        </View>
-      </Provider>
-    );
-  }
+const store = configureStore();
+store.dispatch( fetchCoinData());
+
+export default class App extends Component {
+    render() {
+        return (
+            <Provider store={store}>
+                <View>
+                    <Header />
+                    <CryptoContainer />
+                </View>
+            </Provider>
+        );
+    }
 }
-
-

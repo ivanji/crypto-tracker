@@ -1,23 +1,37 @@
-import axios from 'axios';
-import { apiBaseUrl }  from '../Utils/Constants';
-import { 
-        FETCHING_COIN_DATA,
-        FETCHING_COIN_DATA_SUCCESS,
-        FETCHING_COIN_DATA_FAIL
-} from '../Actions/ActionTypes';
+//import axios from 'axios';
+import { apiBaseUrl } from './../Utils/Constants';
+import {
+    FETCHING_COIN_DATA,
+    FETCHING_COIN_DATA_SUCCESS,
+    FETCHING_COIN_DATA_FAIL,
+} from './../Utils/ActionTypes';
 
-export default function FetchCoinData() {
-    return dispatch => {
-        dispatch({
-            type: FETCHING_COIN_DATA
-        })
 
-        return axios.get(`${apiBaseUrl}/v1/ticker/?limit=10`)
-            .then(res => {
-                dispatch({ type: FETCHING_COIN_DATA_SUCCESS, payload: res.data})
+export function fetchCoinData() {
+    return function(dispatch) {
+
+        fetch(`${apiBaseUrl}/v1/ticker/?limit=10`)
+            .then((response) => {
+                if (response.status !== 200) {
+                    console.log("Looks like there was a problem. Status Code: " + response.status);
+                    return;
+                }
+                response.json().then(data => {
+                    dispatch(fetchCoinDataSuccess(data));
+                })
+
             })
-            .catch(err => {
-                dispatch({ type: FETCHING_COIN_DATA_FAIL, payload: err.data})
-            })
+            .catch(function(error) {
+                console.log('There has been a problem with your fetch operation: ' + error.message);
+                // ADD THIS THROW error
+                throw error;
+        });
     }
+}
+
+export function fetchCoinDataSuccess(data) {
+            return {
+                type: FETCHING_COIN_DATA_SUCCESS,
+                payload: data
+            };
 }

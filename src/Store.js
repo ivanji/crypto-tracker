@@ -1,26 +1,22 @@
 import { Platform } from 'react-native';
-import { createStore, applyMiddleware, compose } from 'redux';
+import {
+    createStore,
+    applyMiddleware,
+    compose
+} from 'redux';
 import devTools from 'remote-redux-devtools';
-import promise from 'redux-promise-middleware';
+import promise from 'redux-promise';
 import thunk from 'redux-thunk';
-import {createLogger} from 'redux-logger';
+import logger from 'redux-logger';
 
-import RootReducer from './Reducers';
+import rootReducer from './Reducers';
 
-const middleware = applyMiddleware(thunk);
+//const middleware = applyMiddleware(promise, thunk);
 
-console.log(thunk);
-
-const Store = createStore(
-    RootReducer,
-    compose(
-        middleware,
-            devTools({
-                name: Platform.OS,
-                hostname: 'localhost',
-                port: 5678
-            })
+export default function configureStore(initialState) {
+    return createStore(
+        rootReducer,
+        initialState,
+        applyMiddleware(thunk)
     )
-)
-
-export default Store;
+}
