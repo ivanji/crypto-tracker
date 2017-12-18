@@ -7,7 +7,7 @@ import {createLogger} from 'redux-logger';
 
 import RootReducer from './Reducers';
 
-const middleware = applyMiddleware(thunk, createLogger());
+const middleware = applyMiddleware(thunk);
 
 console.log(thunk);
 
