@@ -10,3 +10,6 @@ patch:
         patched: '2020-07-13T19:18:23.816Z'
     - react-native > @react-native-community/cli > metro-config > metro > async > lodash:
         patched: '2020-07-13T19:18:23.816Z'
+  'npm:extend:20180424':
+    - snyk > proxy-agent > pac-proxy-agent > get-uri > extend:
+        patched: '2020-07-14T03:11:22.096Z'
